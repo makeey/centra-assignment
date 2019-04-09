@@ -6,11 +6,13 @@ use KanbanBoard\Utilities;
 require '../classes/KanbanBoard/Github.php';
 require '../classes/Utilities.php';
 require '../classes/KanbanBoard/Authentication.php';
-
-$repositories = explode('|', Utilities::env('GH_REPOSITORIES'));
+require '../../vendor/autoload.php';
+$dotenv = Dotenv\Dotenv::create( '../../');
+$dotenv->load();
+$repositories = explode('|', getenv('GH_REPOSITORIES'));
 $authentication = new \KanbanBoard\Login();
 $token = $authentication->login();
-$github = new GithubClient($token, Utilities::env('GH_ACCOUNT'));
+$github = new GithubClient($token, getenv('GH_ACCOUNT'));
 $board = new \KanbanBoard\Application($github, $repositories, array('waiting-for-feedback'));
 $data = $board->board();
 $m = new Mustache_Engine(array(

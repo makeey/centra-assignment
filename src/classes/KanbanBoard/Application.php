@@ -29,6 +29,7 @@ class Application {
 			}
 		}
 		ksort($ms);
+        $milestones = [];
 		foreach ($ms as $name => $data)
 		{
 			$issues = $this->issues($data['repository'], $data['number']);
@@ -45,12 +46,13 @@ class Application {
 				);
 			}
 		}
-		return $milestones;
+        return $milestones;
 	}
 
 	private function issues($repository, $milestone_id)
 	{
 		$i = $this->github->issues($repository, $milestone_id);
+        $issues = [];
 		foreach ($i as $ii)
 		{
 			if (isset($ii['pull_request']))
