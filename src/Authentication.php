@@ -1,8 +1,7 @@
 <?php
 namespace KanbanBoard;
-use KanbanBoard\Utilities;
 
-class Login {
+class Authentication {
 
 	private $client_id = NULL;
 	private $client_secret = NULL;
