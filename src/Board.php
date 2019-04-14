@@ -4,7 +4,9 @@ namespace KanbanBoard;
 
 use KanbanBoard\Entities\Issue;
 use KanbanBoard\Entities\Milestone;
+use KanbanBoard\ExternalService\Service;
 use KanbanBoard\Infrastructure\Board as BoardInterface;
+
 
 class Board implements BoardInterface
 {
@@ -12,10 +14,10 @@ class Board implements BoardInterface
     private $repositories;
     private $account;
 
-    public function __construct(Github $github, array $repositories, $account)
+    public function __construct(Service $service, array $repositories, $account)
     {
         $this->account = $account;
-        $this->github = $github;
+        $this->github = $service;
         $this->repositories = $repositories;
     }
 

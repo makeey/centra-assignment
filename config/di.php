@@ -4,6 +4,7 @@ use KanbanBoard\AuthApplication;
 use KanbanBoard\BoardApplication;
 use KanbanBoard\ExternalService\ClientFactory;
 use KanbanBoard\ExternalService\ClientFactoryInterface;
+use KanbanBoard\ExternalService\Service;
 use KanbanBoard\Github;
 use KanbanBoard\Infrastructure\ApplicationInterface;
 use KanbanBoard\Infrastructure\Board;
@@ -33,14 +34,14 @@ return [
 
     ClientFactoryInterface::class => autowire(ClientFactory::class)->constructor(get(TokenProviderInterface::class)),
 
-    Github::class => autowire()->constructor(
+    Service::class => autowire(Github::class)->constructor(
         get(ClientFactoryInterface::class),
         get(IssueFactory::class),
         get(MilestoneFactory::class)
     )->lazy(),
 
     Board::class => autowire(\KanbanBoard\Board::class)->constructor(
-        get(Github::class),
+        get(Service::class),
         explode('|', getenv('GH_REPOSITORIES')),
         getenv('GH_ACCOUNT')
 
