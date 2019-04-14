@@ -11,11 +11,18 @@ use Mustache_Loader_FilesystemLoader;
 
 class Application implements ApplicationInterface
 {
+    /** @var Authentication */
+    private $authentication;
+
+    public function __construct(Authentication $authentication)
+    {
+        $this->authentication = $authentication;
+    }
+
     public function run()
     {
         $repositories = explode('|', getenv('GH_REPOSITORIES'));
-        $authentication = new Authentication(getenv('GH_CLIENT_ID'), getenv('GH_CLIENT_SECRET'));
-        $authentication->login();
+        $this->authentication->login();
         $tokenProvider = new SessionTokenProvider();
         $github = new Github($tokenProvider, getenv('GH_ACCOUNT'));
         $board = new Board($github, $repositories, array('waiting-for-feedback'));
