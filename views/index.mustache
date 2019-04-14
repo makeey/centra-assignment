@@ -8,7 +8,7 @@
     <title>Kanban Board</title>
 
     <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <style>
         [class*="col-"] {
             padding-top: 0px;
@@ -65,7 +65,7 @@
                                     <img class="img-rounded" src="{{assignee}}" width="16" height="16" border="0"/>&nbsp;
                                     {{#paused}}<em><small>{{/paused}}{{title}}{{#paused}}</small></em>{{/paused}}
                                     <span id="state" class="glyphicon"></span>
-                                    <span style="float: right" class="glyphicon glyphicon-new-window"/>
+                                    <span style="float: right" class="glyphicon glyphicon-new-window"></span>
                                 </a>
                             {{/active}}
                         </div>
@@ -76,7 +76,9 @@
                                 <a href="{{url}}" class="list-group-item list-group-item-success">
                                     <img class="img-rounded" src="{{assignee}}" width="16" height="16" border="0"/>&nbsp;
                                     <s>{{title}}</s>
-                                    <span style="float: right" class="glyphicon glyphicon-new-window"/>
+                                    <span style="float: right" class="gl
+
+                                    yphicon glyphicon-new-window"></span>
                                 </a>
                             {{/completed}}
                         </div>
