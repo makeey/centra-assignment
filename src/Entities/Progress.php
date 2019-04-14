@@ -8,7 +8,7 @@ class Progress implements \JsonSerializable
     private $total;
     private $complete;
     private $remaining;
-    private $percent;
+    private $percent = null;
 
     public function __construct(int $completed, int $remaining)
     {
@@ -20,7 +20,7 @@ class Progress implements \JsonSerializable
 
     private function calculatePercent()
     {
-        $this->percent = $this->total ? round($this->complete / $this->total * 100) : 0;
+        $this->percent = $this->total ? round($this->complete / $this->total * 100) : null;
     }
 
     private function fillTotal()
@@ -43,7 +43,7 @@ class Progress implements \JsonSerializable
         return $this->remaining;
     }
 
-    public function percent(): float
+    public function percent(): ?float
     {
         return $this->percent;
     }

@@ -1,21 +1,22 @@
 <?php
 
+use KanbanBoard\Entities\Progress;
 use PHPUnit\Framework\TestCase;
 
 class ProgressTest extends TestCase
 {
     public function testCalculateWithZeroValues()
     {
-        $progress = new \KanbanBoard\Entities\Progress(0, 0);
+        $progress = new Progress(0, 0);
         $this->assertEquals($progress->total(), 0);
         $this->assertEquals($progress->remaining(), 0);
         $this->assertEquals($progress->complete(), 0);
-        $this->assertEquals($progress->percent(), 0);
+        $this->assertNull($progress->percent());
     }
 
     public function testCalculateWithValues()
     {
-        $progress = new \KanbanBoard\Entities\Progress(5, 5);
+        $progress = new Progress(5, 5);
         $this->assertEquals($progress->total(), 10);
         $this->assertEquals($progress->remaining(), 5);
         $this->assertEquals($progress->complete(), 5);
@@ -24,7 +25,7 @@ class ProgressTest extends TestCase
 
     public function testCalculateWithoutCompleteTasks()
     {
-        $progress = new \KanbanBoard\Entities\Progress(0, 5);
+        $progress = new Progress(0, 5);
         $this->assertEquals($progress->total(), 5);
         $this->assertEquals($progress->remaining(), 5);
         $this->assertEquals($progress->complete(), 0);
@@ -33,7 +34,7 @@ class ProgressTest extends TestCase
 
     public function testCalculateWithoutRemaining()
     {
-        $progress = new \KanbanBoard\Entities\Progress(10, 0);
+        $progress = new Progress(10, 0);
         $this->assertEquals($progress->total(), 10);
         $this->assertEquals($progress->remaining(), 0);
         $this->assertEquals($progress->complete(), 10);
