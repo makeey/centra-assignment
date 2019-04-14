@@ -9,12 +9,9 @@ use \Michelf\Markdown;
 
 class Board implements BoardInterface
 {
-
     private $github;
     private $repositories;
-
     private $milestoneFactory;
-
     private $issueFactory;
 
     public function __construct(Github $github, array $repositories, array $paused_labels = [])
@@ -64,42 +61,4 @@ class Board implements BoardInterface
 		return $issues;
 	}
 
-	private static function _state($issue)
-	{
-		if ($issue['state'] === 'closed')
-			return 'completed';
-		else if (Utilities::hasValue($issue, 'assignee') && count($issue['assignee']) > 0)
-			return 'active';
-		else
-			return 'queued';
-	}
-
-	private static function labels_match($issue, $needles)
-	{
-		if(Utilities::hasValue($issue, 'labels')) {
-			foreach ($issue['labels'] as $label) {
-				if (in_array($label['name'], $needles)) {
-					return array($label['name']);
-				}
-			}
-		}
-		return array();
-
-	}
-
-	private static function _percent($complete, $remaining)
-	{
-		$total = $complete + $remaining;
-		if($total > 0)
-		{
-			$percent = ($complete OR $remaining) ? round($complete / $total * 100) : 0;
-			return array(
-				'total' => $total,
-				'complete' => $complete,
-				'remaining' => $remaining,
-				'percent' => $percent
-			);
-		}
-		return array();
-	}
 }

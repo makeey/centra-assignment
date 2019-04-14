@@ -29,8 +29,9 @@ class AuthApplication implements ApplicationInterface {
     {
         if(array_key_exists('gh-token', $_SESSION)) {
             $this->application->run();
+        }else {
+            $this->login();
         }
-        $this->login();
     }
 	private function login(): void
 	{
