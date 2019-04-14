@@ -1,20 +1,26 @@
 <?php
 namespace KanbanBoard;
 
-use Github\Client;
-use vierbergenlars\SemVer\version;
-
-use vierbergenlars\SemVer\expression;
-use vierbergenlars\SemVer\SemVerException;
+use KanbanBoard\Entities\Milestone;
+use KanbanBoard\Infrastructure\IssueFactory;
+use KanbanBoard\Infrastructure\MilestoneFactory;
 use \Michelf\Markdown;
 
 class Application {
 
-	public function __construct($github, $repositories, $paused_labels = array())
+    private $github;
+    private $repositories;
+
+    private $milestoneFactory;
+
+    private $issueFactory;
+
+    public function __construct(Github $github, array $repositories, array $paused_labels = [])
 	{
 		$this->github = $github;
 		$this->repositories = $repositories;
-		$this->paused_labels = $paused_labels;
+		$this->issueFactory = new IssueFactory(new Markdown(),$paused_labels);
+		$this->milestoneFactory = new MilestoneFactory();
 	}
 
 	public function board()
@@ -24,29 +30,22 @@ class Application {
 		{
 			foreach ($this->github->milestones($repository) as $data)
 			{
-				$ms[$data['title']] = $data;
-				$ms[$data['title']]['repository'] = $repository;
+				$ms[$data['title']] = $this->milestoneFactory->milestone(array_merge($data, ['repository' => $repository]));
+
 			}
 		}
 		ksort($ms);
         $milestones = [];
-		foreach ($ms as $name => $data)
+        /** @var Milestone $m */
+        foreach ($ms as $m)
 		{
-			$issues = $this->issues($data['repository'], $data['number']);
-			$percent = self::_percent($data['closed_issues'], $data['open_issues']);
-			if($percent)
-			{
-				$milestones[] = array(
-					'milestone' => $name,
-					'url' => $data['html_url'],
-					'progress' => $percent,
-					'queued' => $issues['queued'],
-					'active' => $issues['active'],
-					'completed' => $issues['completed']
-				);
-			}
+			$issues = $this->issues($m->repository(),$m->number());
+			$m->withIssues(...$issues);
+			$milestones[] = $m;
 		}
-        return $milestones;
+        return array_map(function (Milestone $milestone){
+            return $milestone->jsonSerialize();
+        },$milestones);
 	}
 
 	private function issues($repository, $milestone_id)
@@ -57,22 +56,9 @@ class Application {
 		{
 			if (isset($ii['pull_request']))
 				continue;
-			$issues[$ii['state'] === 'closed' ? 'completed' : (($ii['assignee']) ? 'active' : 'queued')][] = array(
-				'id' => $ii['id'], 'number' => $ii['number'],
-				'title'            	=> $ii['title'],
-				'body'             	=> Markdown::defaultTransform($ii['body']),
-     'url' => $ii['html_url'],
-				'assignee'         	=> (is_array($ii) && array_key_exists('assignee', $ii) && !empty($ii['assignee'])) ? $ii['assignee']['avatar_url'].'?s=16' : NULL,
-				'paused'			=> self::labels_match($ii, $this->paused_labels),
-				'progress'			=> self::_percent(
-											substr_count(strtolower($ii['body']), '[x]'),
-											substr_count(strtolower($ii['body']), '[ ]')),
-				'closed'			=> $ii['closed_at']
-			);
+			$issues[] = $this->issueFactory->issue($ii);
 		}
-		usort($issues['active'], function ($a, $b) {
-			return count($a['paused']) - count($b['paused']) === 0 ? strcmp($a['title'], $b['title']) : count($a['paused']) - count($b['paused']);
-		});
+
 		return $issues;
 	}
 

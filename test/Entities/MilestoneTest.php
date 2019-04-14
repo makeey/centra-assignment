@@ -28,7 +28,7 @@ class MilestoneTest extends TestCase
         $this->number = 2;
         $this->repository = 'repository';
 
-       $this->activeIssue = new Issue(
+        $this->activeIssue = new Issue(
             1,
             2,
             'title active issue',
@@ -39,7 +39,7 @@ class MilestoneTest extends TestCase
             []
         );
 
-       $this->queuedIssue = new Issue(
+        $this->queuedIssue = new Issue(
             2,
             3,
             'title queued issue',
@@ -82,7 +82,7 @@ class MilestoneTest extends TestCase
         $this->assertEquals($this->title, $milestoneData['milestone']);
         $this->assertEquals($this->url, $milestoneData['url']);
         $this->assertEquals($this->progress->jsonSerialize(), $milestoneData['progress']);
-        $this->assertEquals([],$milestoneData['active']);
+        $this->assertEquals([], $milestoneData['active']);
         $this->assertEquals([], $milestoneData['queued']);
         $this->assertEquals([], $milestoneData['active']);
 
@@ -104,8 +104,82 @@ class MilestoneTest extends TestCase
         $this->assertEquals($this->title, $milestoneData['milestone']);
         $this->assertEquals($this->url, $milestoneData['url']);
         $this->assertEquals($this->progress->jsonSerialize(), $milestoneData['progress']);
-        $this->assertEquals([$this->activeIssue->jsonSerialize()],$milestoneData['active']);
+        $this->assertEquals([$this->activeIssue->jsonSerialize()], $milestoneData['active']);
         $this->assertEquals([$this->queuedIssue->jsonSerialize()], $milestoneData['queued']);
         $this->assertEquals([$this->activeIssue->jsonSerialize()], $milestoneData['active']);
+    }
+
+    public function testCanSetIssueAfterCreate()
+    {
+        $milestone = new Milestone(
+            $this->number,
+            $this->title,
+            $this->repository,
+            $this->url,
+            $this->progress
+        );
+
+        $milestone->withIssues(...$this->issues);
+
+        $milestoneData = $milestone->jsonSerialize();
+
+        $this->assertEquals($this->title, $milestoneData['milestone']);
+        $this->assertEquals($this->url, $milestoneData['url']);
+        $this->assertEquals($this->progress->jsonSerialize(), $milestoneData['progress']);
+        $this->assertEquals([$this->activeIssue->jsonSerialize()], $milestoneData['active']);
+        $this->assertEquals([$this->queuedIssue->jsonSerialize()], $milestoneData['queued']);
+        $this->assertEquals([$this->activeIssue->jsonSerialize()], $milestoneData['active']);
+    }
+
+    public function testCanSortActiveIssues()
+    {
+
+        $milestone = new Milestone(
+            $this->number,
+            $this->title,
+            $this->repository,
+            $this->url,
+            $this->progress
+        );
+
+
+        $issues = [
+            new Issue(
+                1,
+                2,
+                'title',
+                'body',
+                'url',
+                IssueState::ACTIVE,
+                new Progress(5, 5),
+                ['pause', 'waiting-for-feedback']
+            ),
+            new Issue(
+                1,
+                2,
+                'title',
+                'body',
+                'url',
+                IssueState::ACTIVE,
+                new Progress(5, 5),
+                ['pause']
+            ),
+            new Issue(
+                1,
+                2,
+                '1 title',
+                'body',
+                'url',
+                IssueState::ACTIVE,
+                new Progress(5, 5),
+                ['pause']
+            ),
+        ];
+        $milestone->withIssues(...$issues);
+
+        $sortedActiveIssues = $milestone->activeIssues();
+        $this->assertEquals($issues[2], $sortedActiveIssues[0]);
+        $this->assertEquals($issues[0], $sortedActiveIssues[2]);
+        $this->assertEquals($issues[1], $sortedActiveIssues[1]);
     }
 }

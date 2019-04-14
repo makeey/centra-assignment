@@ -81,6 +81,9 @@ class Milestone implements \JsonSerializable
             $this->active = array_filter($this->issues, static function (Issue $issue) {
                 return $issue->state() === IssueState::ACTIVE;
             });
+            usort($this->active, function (Issue $a, Issue $b): int {
+               return count($a->paused()) <=> count($b->paused()) ?: $a->title() <=> $b->title();
+            });
         }
         return $this->active;
     }
@@ -122,5 +125,9 @@ class Milestone implements \JsonSerializable
         return array_map(static function (Issue $issue) {
             return $issue->jsonSerialize();
         }, $issues);
+    }
+
+    public function withIssues(Issue ...$issues){
+        $this->issues = $issues;
     }
 }
