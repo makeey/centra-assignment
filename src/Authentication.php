@@ -6,10 +6,10 @@ class Authentication {
 	private $client_id = NULL;
 	private $client_secret = NULL;
 
-	public function __construct()
+	public function __construct(string  $client_id, string $client_secret)
 	{
-		$this->client_id = Utilities::env('GH_CLIENT_ID');
-		$this->client_secret = Utilities::env('GH_CLIENT_SECRET');
+		$this->client_id = $client_id;
+		$this->client_secret = $client_secret;
 	}
 
 	public function logout()

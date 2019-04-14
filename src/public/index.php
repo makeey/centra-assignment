@@ -2,9 +2,10 @@
 
 require_once '../../bootstrap.php';
 $repositories = explode('|', getenv('GH_REPOSITORIES'));
-$authentication = new \KanbanBoard\Authentication();
+$authentication = new \KanbanBoard\Authentication(getenv('GH_CLIENT_ID'), getenv('GH_CLIENT_SECRET'));
 $token = $authentication->login();
-$github = new \KanbanBoard\Github($token, getenv('GH_ACCOUNT'));
+$tokenProvider = new \KanbanBoard\Infrastructure\SessionTokenProvider();
+$github = new \KanbanBoard\Github($tokenProvider, getenv('GH_ACCOUNT'));
 $board = new \KanbanBoard\Application($github, $repositories, array('waiting-for-feedback'));
 $data = $board->board();
 $m = new Mustache_Engine(array(

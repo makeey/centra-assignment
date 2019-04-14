@@ -1,20 +1,21 @@
 <?php
+
 namespace KanbanBoard;
 
 use Github\Client;
 use Github\HttpClient\CachedHttpClient;
+use KanbanBoard\Infrastructure\TokenProviderInterface;
 
 class Github
 {
     private $client;
-    private $milestone_api;
     private $account;
 
-    public function __construct($token, $account)
+    public function __construct(TokenProviderInterface $token, string $account)
     {
         $this->account = $account;
-        $this->client= new Client(new CachedHttpClient(array('cache_dir' => '/tmp/github-api-cache')));
-        $this->client->authenticate($token, Client::AUTH_HTTP_TOKEN);
+        $this->client = new Client(new CachedHttpClient(array('cache_dir' => '/tmp/github-api-cache')));
+        $this->client->authenticate($token->tokenStrictly(), Client::AUTH_HTTP_TOKEN);
         $this->milestone_api = $this->client->api('issues')->milestones();
     }
 
