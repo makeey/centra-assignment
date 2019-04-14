@@ -2,11 +2,13 @@
 namespace KanbanBoard;
 
 use KanbanBoard\Entities\Milestone;
+use KanbanBoard\Infrastructure\Board as BoardInterface;
 use KanbanBoard\Infrastructure\IssueFactory;
 use KanbanBoard\Infrastructure\MilestoneFactory;
 use \Michelf\Markdown;
 
-class Application {
+class Board implements BoardInterface
+{
 
     private $github;
     private $repositories;
@@ -23,7 +25,7 @@ class Application {
 		$this->milestoneFactory = new MilestoneFactory();
 	}
 
-	public function board()
+	public function board(): array
 	{
 		$ms = array();
 		foreach ($this->repositories as $repository)
