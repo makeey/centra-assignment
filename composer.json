@@ -10,7 +10,9 @@
 		"knplabs/github-api": "^1.5",
 		"michelf/php-markdown": "^1.6",
 		"phpunit/phpunit": "8.0.1",
-		"vlucas/phpdotenv": "^3.3@dev"
+		"php-di/php-di": "dev-master",
+		"vlucas/phpdotenv": "^3.3@dev",
+		"beberlei/assert": "dev-master"
 	},
 	"minimum-stability": "dev"
 }
