@@ -31,7 +31,6 @@ class MilestoneFactoryTest extends TestCase
         $this->assertEquals($this->milestoneData['title'], $milestone->title());
         $this->assertEquals($this->milestoneData['html_url'], $milestone->url());
         $this->assertEquals($this->milestoneData['number'], $milestone->number());
-        $this->assertEquals($this->milestoneData['repository'], $milestone->repository());
         $this->assertInstanceOf(Progress::class, $milestone->progress());
         $this->assertEquals($this->milestoneData['open_issues'], $milestone->progress()->remaining());
         $this->assertEquals($this->milestoneData['closed_issues'], $milestone->progress()->complete());

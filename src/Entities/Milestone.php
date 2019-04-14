@@ -18,8 +18,7 @@ class Milestone implements \JsonSerializable
     /** @var int */
     private $number;
 
-    /** @var string */
-    private $repository;
+
 
     /** @var Issue[] */
     private $issues = [];
@@ -36,7 +35,6 @@ class Milestone implements \JsonSerializable
     public function __construct(
         int $number,
         string $title,
-        string $repository,
         string $url,
         Progress $progress,
         Issue ...$issues
@@ -46,7 +44,6 @@ class Milestone implements \JsonSerializable
         $this->url = $url;
         $this->progress = $progress;
         $this->number = $number;
-        $this->repository = $repository;
         $this->issues = $issues;
     }
 
@@ -70,10 +67,6 @@ class Milestone implements \JsonSerializable
         return $this->number;
     }
 
-    public function repository(): string
-    {
-        return $this->repository;
-    }
 
     public function activeIssues(): array
     {

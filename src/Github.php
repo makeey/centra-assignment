@@ -26,7 +26,7 @@ class Github
     public function milestones(string $account, string $repository)
     {
         return array_map(function ($datum) use ($repository) {
-            return $this->milestoneFactory->milestone(array_merge($datum, ['repository' => $repository]));
+            return $this->milestoneFactory->milestone($datum);
         }, $this->clientFactory->milestoneClient()->all($account, $repository));
     }
 

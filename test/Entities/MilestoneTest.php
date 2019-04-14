@@ -14,11 +14,10 @@ class MilestoneTest extends TestCase
     private $url;
     private $progress;
     private $number;
-    private $repository;
-    private $issues;
     private $activeIssue;
     private $queuedIssue;
     private $completedIssue;
+    private $issues;
 
     public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
@@ -26,7 +25,6 @@ class MilestoneTest extends TestCase
         $this->url = 'http://localhost';
         $this->progress = new Progress(10, 10);
         $this->number = 2;
-        $this->repository = 'repository';
 
         $this->activeIssue = new Issue(
             1,
@@ -72,7 +70,6 @@ class MilestoneTest extends TestCase
         $milestone = new Milestone(
             $this->number,
             $this->title,
-            $this->repository,
             $this->url,
             $this->progress
         );
@@ -93,7 +90,6 @@ class MilestoneTest extends TestCase
         $milestone = new Milestone(
             $this->number,
             $this->title,
-            $this->repository,
             $this->url,
             $this->progress,
             ...$this->issues
@@ -114,7 +110,6 @@ class MilestoneTest extends TestCase
         $milestone = new Milestone(
             $this->number,
             $this->title,
-            $this->repository,
             $this->url,
             $this->progress
         );
@@ -137,7 +132,6 @@ class MilestoneTest extends TestCase
         $milestone = new Milestone(
             $this->number,
             $this->title,
-            $this->repository,
             $this->url,
             $this->progress
         );

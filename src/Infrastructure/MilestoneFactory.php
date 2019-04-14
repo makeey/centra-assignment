@@ -13,7 +13,6 @@ class MilestoneFactory implements MilestoneFactoryInterface
         return new Milestone(
             $data['number'],
             $data['title'],
-            $data['repository'],
             $data['html_url'],
             $this->calculateProgress($data['closed_issues'], $data['open_issues'])
         );
