@@ -2,21 +2,21 @@
 
 use KanbanBoard\AuthApplication;
 use KanbanBoard\BoardApplication;
-use KanbanBoard\ExternalService\ClientFactory;
-use KanbanBoard\ExternalService\ClientFactoryInterface;
-use KanbanBoard\ExternalService\Service;
-use KanbanBoard\Github;
+use KanbanBoard\ExternalService\Github\ClientFactory;
+use KanbanBoard\ExternalService\Github\ClientFactoryInterface;
+use KanbanBoard\ExternalService\Github\Github;
 use KanbanBoard\Infrastructure\ApplicationInterface;
 use KanbanBoard\Infrastructure\Board;
 use KanbanBoard\Infrastructure\IssueFactory;
 use KanbanBoard\Infrastructure\MilestoneFactory;
+use KanbanBoard\Infrastructure\Service;
 use KanbanBoard\Infrastructure\SessionTokenProvider;
 use KanbanBoard\Infrastructure\TokenProviderInterface;
 use League\OAuth2\Client\Provider\AbstractProvider;
-use function DI\autowire;
-use function DI\get;
 use Michelf\Markdown;
 use Michelf\MarkdownInterface;
+use function DI\autowire;
+use function DI\get;
 
 return [
 
@@ -40,7 +40,7 @@ return [
         get(MilestoneFactory::class)
     )->lazy(),
 
-    Board::class => autowire(\KanbanBoard\Board::class)->constructor(
+    Board::class => autowire(\KanbanBoard\ExternalService\Github\Board::class)->constructor(
         get(Service::class),
         explode('|', getenv('GH_REPOSITORIES')),
         getenv('GH_ACCOUNT')

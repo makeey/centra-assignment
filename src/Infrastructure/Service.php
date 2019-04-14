@@ -1,6 +1,6 @@
 <?php
 
-namespace KanbanBoard\ExternalService;
+namespace KanbanBoard\Infrastructure;
 
 
 interface Service

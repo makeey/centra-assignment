@@ -1,11 +1,11 @@
 <?php
 
-namespace KanbanBoard;
+namespace KanbanBoard\ExternalService\Github;
 
-use KanbanBoard\ExternalService\ClientFactory;
-use KanbanBoard\ExternalService\Service;
+
 use KanbanBoard\Infrastructure\IssueFactory;
 use KanbanBoard\Infrastructure\MilestoneFactory;
+use KanbanBoard\Infrastructure\Service;
 
 class Github implements Service
 {

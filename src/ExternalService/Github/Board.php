@@ -1,11 +1,11 @@
 <?php
 
-namespace KanbanBoard;
+namespace KanbanBoard\ExternalService\Github;
 
 use KanbanBoard\Entities\Issue;
 use KanbanBoard\Entities\Milestone;
-use KanbanBoard\ExternalService\Service;
 use KanbanBoard\Infrastructure\Board as BoardInterface;
+use KanbanBoard\Infrastructure\Service;
 
 
 class Board implements BoardInterface
