@@ -47,6 +47,10 @@ return [
 
     )->lazy(),
 
+    Mustache_Engine::class =>autowire()->constructor(array(
+        'loader' => new Mustache_Loader_FilesystemLoader('../views'),
+    )),
+
     ApplicationInterface::class => autowire(AuthApplication::class)->constructor(
         autowire(BoardApplication::class),
         get(AbstractProvider::class)

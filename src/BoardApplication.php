@@ -12,17 +12,15 @@ use Mustache_Loader_FilesystemLoader;
 class BoardApplication implements ApplicationInterface
 {
     private $board;
-
-    public function __construct(BoardInterface $board)
+    private $engine;
+    public function __construct(BoardInterface $board, Mustache_Engine $engine)
     {
         $this->board = $board;
+        $this->engine = $engine;
     }
 
     public function run()
     {
-        $m = new Mustache_Engine(array(
-            'loader' => new Mustache_Loader_FilesystemLoader('../views'),
-        ));
-        echo $m->render('index', array('milestones' => $this->board->board()));
+        echo $this->engine->render('index', array('milestones' => $this->board->board()));
     }
 }
