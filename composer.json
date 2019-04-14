@@ -13,7 +13,8 @@
 		"php-di/php-di": "dev-master",
 		"vlucas/phpdotenv": "^3.3@dev",
 		"beberlei/assert": "dev-master",
-		"ocramius/proxy-manager": "~2.0"
+		"ocramius/proxy-manager": "~2.0",
+		"league/oauth2-github": "^1.0@dev"
 	},
 	"minimum-stability": "dev"
 }
