@@ -2,30 +2,44 @@
 
 namespace KanbanBoard;
 
-use Github\Client;
-use Github\HttpClient\CachedHttpClient;
 use KanbanBoard\ExternalService\ClientFactory;
-use KanbanBoard\Infrastructure\TokenProviderInterface;
+use KanbanBoard\Infrastructure\IssueFactory;
+use KanbanBoard\Infrastructure\MilestoneFactory;
 
 class Github
 {
-    private $account;
     private $clientFactory;
+    private $milestoneFactory;
+    private $issueFactory;
 
-    public function __construct(ClientFactory $clientFactory, string $account)
+    public function __construct(
+        ClientFactory $clientFactory,
+        IssueFactory $issueFactory,
+        MilestoneFactory $milestoneFactory
+    )
     {
-        $this->account = $account;
         $this->clientFactory = $clientFactory;
+        $this->milestoneFactory = $milestoneFactory;
+        $this->issueFactory = $issueFactory;
     }
 
-    public function milestones($repository)
+    public function milestones(string $account, string $repository)
     {
-        return $this->clientFactory->milestoneClient()->all($this->account, $repository);
+        return array_map(function ($datum) use ($repository) {
+            return $this->milestoneFactory->milestone(array_merge($datum, ['repository' => $repository]));
+        }, $this->clientFactory->milestoneClient()->all($account, $repository));
     }
 
-    public function issues($repository, $milestone_id)
+    public function issues(string $account, $repository, $milestone_id)
     {
         $issue_parameters = array('milestone' => $milestone_id, 'state' => 'all');
-        return $this->clientFactory->issueClient()->all($this->account, $repository, $issue_parameters);
+        $issues = array_filter($this->clientFactory->issueClient()->all($account, $repository, $issue_parameters),
+            function ($issues) {
+                return empty($issues['pull_request']);
+            }
+        );
+        return array_map(function ($issue) {
+            return $this->issueFactory->issue($issue);
+        }, $issues);
     }
 }

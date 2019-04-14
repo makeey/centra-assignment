@@ -7,11 +7,15 @@ use KanbanBoard\ExternalService\ClientFactoryInterface;
 use KanbanBoard\Github;
 use KanbanBoard\Infrastructure\ApplicationInterface;
 use KanbanBoard\Infrastructure\Board;
+use KanbanBoard\Infrastructure\IssueFactory;
+use KanbanBoard\Infrastructure\MilestoneFactory;
 use KanbanBoard\Infrastructure\SessionTokenProvider;
 use KanbanBoard\Infrastructure\TokenProviderInterface;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use function DI\autowire;
 use function DI\get;
+use Michelf\Markdown;
+use Michelf\MarkdownInterface;
 
 return [
 
@@ -21,19 +25,25 @@ return [
         'redirectUri' => getenv('GH_REDIRECT_URI')
     ])->lazy(),
 
+    MarkdownInterface::class=> autowire(Markdown::class),
+    IssueFactory::class => autowire()->constructor(get(MarkdownInterface::class),explode('|', getenv('GH_PAUSE_LABELS'))),
+    MilestoneFactory::class => autowire(),
+
     TokenProviderInterface::class => autowire(SessionTokenProvider::class)->lazy(),
 
     ClientFactoryInterface::class => autowire(ClientFactory::class)->constructor(get(TokenProviderInterface::class)),
 
     Github::class => autowire()->constructor(
         get(ClientFactoryInterface::class),
-        getenv('GH_ACCOUNT')
+        get(IssueFactory::class),
+        get(MilestoneFactory::class)
     )->lazy(),
 
     Board::class => autowire(\KanbanBoard\Board::class)->constructor(
         get(Github::class),
         explode('|', getenv('GH_REPOSITORIES')),
-        explode('|', getenv('GH_PAUSE_LABELS'))
+        getenv('GH_ACCOUNT')
+
     )->lazy(),
 
     ApplicationInterface::class => autowire(AuthApplication::class)->constructor(
