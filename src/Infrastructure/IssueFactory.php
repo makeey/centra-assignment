@@ -21,16 +21,6 @@ class IssueFactory implements IssueFactoryIntraface
         $this->markdown = $markdown;
     }
 
-    /** @return Issue[] */
-    public function issues(array $data): array
-    {
-        $issues = [];
-        foreach ($data as $issueData)
-        {
-            $issues[] = $this->issue($issueData);
-        }
-        return $issues;
-    }
 
     public function issue(array $data): Issue
     {
@@ -47,7 +37,8 @@ class IssueFactory implements IssueFactoryIntraface
             ),
             $this->resolvePause($data),
             $data['closed_at'],
-            $this->resolveAssignee($data)
+            $this->resolveAssignee($data),
+            $data['pull_request']
             );
     }
 

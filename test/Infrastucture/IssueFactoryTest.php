@@ -119,7 +119,7 @@ class IssueFactoryTest extends TestCase
         $this->assertEquals(0, $issue->progress()->complete());
         $this->assertEquals(0, $issue->progress()->total());
         $this->assertEquals(0, $issue->progress()->remaining());
-
+        $this->assertTrue($issue->isHasPullRequest());
     }
 
     public function testCanCreateIssueWithOutAssigned()
@@ -143,6 +143,6 @@ class IssueFactoryTest extends TestCase
         $this->assertEquals(2, $issue->progress()->complete());
         $this->assertEquals(6, $issue->progress()->total());
         $this->assertEquals(4, $issue->progress()->remaining());
-
+        $this->assertFalse($issue->isHasPullRequest());
     }
 }

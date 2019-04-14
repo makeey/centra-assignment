@@ -45,7 +45,10 @@ class IssueTest extends TestCase
             $this->url,
             $this->state,
             $this->progress,
-            []
+            [],
+            null,
+            null,
+            ['pull_request']
         );
 
         $issueArray = $issue->jsonSerialize();
@@ -58,6 +61,7 @@ class IssueTest extends TestCase
         $this->assertEquals($this->state, $issueArray['state']);
         $this->assertEquals([], $issueArray['paused']);
         $this->assertEquals($this->progress->jsonSerialize(), $issueArray['progress']);
+        $this->assertTrue($issue->isHasPullRequest());
 
 
     }
