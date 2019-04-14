@@ -1,15 +1,16 @@
 <?php
 namespace KanbanBoard;
 
+use League\OAuth2\Client\Provider\AbstractProvider;
+
 class Authentication {
 
-	private $client_id = NULL;
-	private $client_secret = NULL;
+    /** @var AbstractProvider */
+    private $provider;
 
-	public function __construct(string  $client_id, string $client_secret)
+    public function __construct(AbstractProvider $provider)
 	{
-		$this->client_id = $client_id;
-		$this->client_secret = $client_secret;
+		$this->provider = $provider;
 	}
 
 	public function logout()
@@ -43,35 +44,17 @@ class Authentication {
 
 	private function _redirectToGithub()
 	{
-		$url = 'Location: https://github.com/login/oauth/authorize';
-		$url .= '?client_id=' . $this->client_id;
-		$url .= '&scope=repo';
-		$url .= '&state=LKHYgbn776tgubkjhk';
-		header($url);
-		exit();
+        $authUrl = $this->provider->getAuthorizationUrl();
+        $_SESSION['oauth2state'] = $this->provider->getState();
+        header('Location: '.$authUrl);
+        exit;
 	}
 
 	private function _returnsFromGithub($code)
 	{
-		$url = 'https://github.com/login/oauth/access_token';
-		$data = array(
-			'code' => $code,
-			'state' => 'LKHYgbn776tgubkjhk',
-			'client_id' => $this->client_id,
-			'client_secret' => $this->client_secret);
-		$options = array(
-			'http' => array(
-				'method' => 'POST',
-				'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-				'content' => http_build_query($data),
-			),
-		);
-		$context = stream_context_create($options);
-		$result = file_get_contents($url, false, $context);
-		if ($result === FALSE)
-			die('Error');
-		$result = explode('=', explode('&', $result)[0]);
-		array_shift($result);
-		return array_shift($result);
+        $token = $this->provider->getAccessToken('authorization_code', [
+            'code' => $code
+        ]);
+        return $token;
 	}
 }
