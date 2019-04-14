@@ -1,4 +1,5 @@
 <?php
+
 namespace KanbanBoard;
 
 use KanbanBoard\Entities\Issue;
@@ -12,11 +13,11 @@ class Board implements BoardInterface
     private $account;
 
     public function __construct(Github $github, array $repositories, $account)
-	{
-	    $this->account = $account;
-		$this->github = $github;
-		$this->repositories = $repositories;
-	}
+    {
+        $this->account = $account;
+        $this->github = $github;
+        $this->repositories = $repositories;
+    }
 
     public function board(): array
     {
@@ -34,20 +35,25 @@ class Board implements BoardInterface
 
     private function milestoneForRepositoryWithIssues($repository)
     {
+        $milestones = $this->github->milestones($this->account, $repository);
+        $milestones = array_filter($milestones, static function (Milestone $milestone): bool {
+            return null !== $milestone->progress()->percent();
+        });
         return array_map(
-            function (Milestone $milestone) use($repository) {
+            function (Milestone $milestone) use ($repository) {
                 $milestone->withIssues(
-                    ...$this->issueForMilestoneWithoutPullRequest($repository,$milestone->number())
+                    ...$this->issueForMilestoneWithoutPullRequest($repository, $milestone->number())
                 );
                 return $milestone;
             },
-            $this->github->milestones($this->account, $repository)
+            $milestones
         );
     }
 
-    private function issueForMilestoneWithoutPullRequest(string $repository, int $milestoneNumber){
+    private function issueForMilestoneWithoutPullRequest(string $repository, int $milestoneNumber)
+    {
         return array_filter(
-            $this->github->issues($this->account,$repository, $milestoneNumber), static function(Issue $issue){
+            $this->github->issues($this->account, $repository, $milestoneNumber), static function (Issue $issue) {
             return !$issue->isHasPullRequest();
         });
     }
