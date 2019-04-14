@@ -30,7 +30,7 @@ class Issue implements \JsonSerializable
     private $progress;
 
     /** @var array */
-    private $pullRequest;
+    private $pullRequest = [];
 
     public function __construct(
         int $id,
@@ -43,7 +43,7 @@ class Issue implements \JsonSerializable
         array $paused,
         ?string $closed = null,
         ?string $assignee = null,
-        array $pullRequest = []
+        ?array $pullRequest = null
     )
     {
         $this->id = $id;
@@ -56,7 +56,7 @@ class Issue implements \JsonSerializable
         $this->progress = $progress;
         $this->closed = $closed;
         $this->state = $state;
-        $this->pullRequest = $pullRequest;
+        $this->pullRequest = $pullRequest ? $pullRequest : [];
     }
 
     /** @var string */
@@ -123,10 +123,11 @@ class Issue implements \JsonSerializable
         return $this->state;
     }
 
-    public function isHasPullRequest():bool
+    public function isHasPullRequest(): bool
     {
-        return (bool) !empty($this->pullRequest);
+        return (bool)!empty($this->pullRequest);
     }
+
     public function jsonSerialize()
     {
         return [

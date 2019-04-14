@@ -38,7 +38,7 @@ class IssueFactory implements IssueFactoryIntraface
             $this->resolvePause($data),
             $data['closed_at'],
             $this->resolveAssignee($data),
-            $data['pull_request']
+            array_key_exists('pull_request',$data) ? $data['pull_request'] : []
             );
     }
 

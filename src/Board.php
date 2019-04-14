@@ -1,6 +1,7 @@
 <?php
 namespace KanbanBoard;
 
+use KanbanBoard\Entities\Issue;
 use KanbanBoard\Entities\Milestone;
 use KanbanBoard\Infrastructure\Board as BoardInterface;
 
@@ -36,12 +37,19 @@ class Board implements BoardInterface
         return array_map(
             function (Milestone $milestone) use($repository) {
                 $milestone->withIssues(
-                    ...$this->github->issues($this->account,$repository, $milestone->number())
+                    ...$this->issueForMilestoneWithoutPullRequest($repository,$milestone->number())
                 );
                 return $milestone;
             },
             $this->github->milestones($this->account, $repository)
         );
+    }
+
+    private function issueForMilestoneWithoutPullRequest(string $repository, int $milestoneNumber){
+        return array_filter(
+            $this->github->issues($this->account,$repository, $milestoneNumber), static function(Issue $issue){
+            return !$issue->isHasPullRequest();
+        });
     }
 
 }
