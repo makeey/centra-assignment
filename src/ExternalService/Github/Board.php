@@ -4,8 +4,8 @@ namespace KanbanBoard\ExternalService\Github;
 
 use KanbanBoard\Entities\Issue;
 use KanbanBoard\Entities\Milestone;
-use KanbanBoard\Infrastructure\Board as BoardInterface;
-use KanbanBoard\Infrastructure\Service;
+use KanbanBoard\Infrastructure\Interfaces\Board as BoardInterface;
+use KanbanBoard\Infrastructure\Interfaces\Service;
 
 
 class Board implements BoardInterface

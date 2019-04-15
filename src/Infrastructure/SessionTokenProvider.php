@@ -4,8 +4,9 @@ namespace KanbanBoard\Infrastructure;
 
 
 use Assert\Assertion;
+use KanbanBoard\Infrastructure\Interfaces\TokenProvider;
 
-class SessionTokenProvider implements TokenProviderInterface
+class SessionTokenProvider implements TokenProvider
 {
     public function tokenStrictly(): string
     {

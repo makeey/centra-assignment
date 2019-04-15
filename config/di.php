@@ -5,13 +5,13 @@ use KanbanBoard\BoardApplication;
 use KanbanBoard\ExternalService\Github\ClientFactory;
 use KanbanBoard\ExternalService\Github\ClientFactoryInterface;
 use KanbanBoard\ExternalService\Github\Github;
-use KanbanBoard\Infrastructure\ApplicationInterface;
-use KanbanBoard\Infrastructure\Board;
+use KanbanBoard\Infrastructure\Interfaces\Application;
+use KanbanBoard\Infrastructure\Interfaces\Board;
+use KanbanBoard\Infrastructure\Interfaces\Service;
+use KanbanBoard\Infrastructure\Interfaces\TokenProvider;
 use KanbanBoard\Infrastructure\IssueFactory;
 use KanbanBoard\Infrastructure\MilestoneFactory;
-use KanbanBoard\Infrastructure\Service;
 use KanbanBoard\Infrastructure\SessionTokenProvider;
-use KanbanBoard\Infrastructure\TokenProviderInterface;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use Michelf\Markdown;
 use Michelf\MarkdownInterface;
@@ -30,9 +30,9 @@ return [
     IssueFactory::class => autowire()->constructor(get(MarkdownInterface::class),explode('|', getenv('GH_PAUSE_LABELS'))),
     MilestoneFactory::class => autowire(),
 
-    TokenProviderInterface::class => autowire(SessionTokenProvider::class)->lazy(),
+    TokenProvider::class => autowire(SessionTokenProvider::class)->lazy(),
 
-    ClientFactoryInterface::class => autowire(ClientFactory::class)->constructor(get(TokenProviderInterface::class)),
+    ClientFactoryInterface::class => autowire(ClientFactory::class)->constructor(get(TokenProvider::class)),
 
     Service::class => autowire(Github::class)->constructor(
         get(ClientFactoryInterface::class),
@@ -48,10 +48,10 @@ return [
     )->lazy(),
 
     Mustache_Engine::class =>autowire()->constructor(array(
-        'loader' => new Mustache_Loader_FilesystemLoader('../views'),
-    )),
+        'loader' => new Mustache_Loader_FilesystemLoader(__DIR__.'/../views'),
+    ))->lazy(),
 
-    ApplicationInterface::class => autowire(AuthApplication::class)->constructor(
+    Application::class => autowire(AuthApplication::class)->constructor(
         autowire(BoardApplication::class),
         get(AbstractProvider::class)
     ),

@@ -6,9 +6,10 @@ namespace KanbanBoard\Infrastructure;
 use KanbanBoard\Entities\Issue;
 use KanbanBoard\Entities\IssueState;
 use KanbanBoard\Entities\Progress;
+use KanbanBoard\Infrastructure\Interfaces\IssueFactory as IssueFactoryInterface;
 use Michelf\MarkdownInterface;
 
-class IssueFactory implements IssueFactoryIntraface
+class IssueFactory implements IssueFactoryInterface
 {
 
     private $markdown;

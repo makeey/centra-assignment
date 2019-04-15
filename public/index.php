@@ -1,9 +1,9 @@
 <?php
 
-use KanbanBoard\Infrastructure\ApplicationInterface;
+use KanbanBoard\Infrastructure\Interfaces\Application;
 
 $container = require_once '../bootstrap.php';
 
-$container->call(static function(ApplicationInterface $application){
+$container->call(static function(Application $application){
    $application->run();
 });

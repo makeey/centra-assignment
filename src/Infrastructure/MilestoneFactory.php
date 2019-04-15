@@ -4,6 +4,7 @@ namespace KanbanBoard\Infrastructure;
 
 use KanbanBoard\Entities\Milestone;
 use KanbanBoard\Entities\Progress;
+use KanbanBoard\Infrastructure\Interfaces\MilestoneFactory as MilestoneFactoryInterface;
 
 class MilestoneFactory implements MilestoneFactoryInterface
 {

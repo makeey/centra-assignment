@@ -1,11 +1,11 @@
 <?php
 
-namespace KanbanBoard\Infrastructure;
+namespace KanbanBoard\Infrastructure\Interfaces;
 
 
 use KanbanBoard\Entities\Issue;
 
-interface IssueFactoryIntraface
+interface IssueFactory
 {
     public function issue(array $data): Issue;
 }

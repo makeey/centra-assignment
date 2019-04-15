@@ -7,7 +7,7 @@ namespace KanbanBoard\ExternalService\Github;
 use Github\Api\Issue;
 use Github\Client;
 use Github\HttpClient\CachedHttpClient;
-use KanbanBoard\Infrastructure\TokenProviderInterface;
+use KanbanBoard\Infrastructure\Interfaces\TokenProvider;
 
 class ClientFactory implements ClientFactoryInterface
 {
@@ -19,7 +19,7 @@ class ClientFactory implements ClientFactoryInterface
     /** @var Issue */
     private $issueClient;
 
-    public function __construct(TokenProviderInterface $token)
+    public function __construct(TokenProvider $token)
     {
         $this->client = new Client(new CachedHttpClient(array('cache_dir' => '/tmp/github-api-cache')));
         $this->client->authenticate($token->tokenStrictly(), Client::AUTH_HTTP_TOKEN);

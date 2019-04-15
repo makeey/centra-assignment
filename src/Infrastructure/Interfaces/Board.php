@@ -1,6 +1,6 @@
 <?php
 
-namespace KanbanBoard\Infrastructure;
+namespace KanbanBoard\Infrastructure\Interfaces;
 
 interface Board
 {

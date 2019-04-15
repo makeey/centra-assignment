@@ -1,17 +1,17 @@
 <?php
 namespace KanbanBoard;
 
-use KanbanBoard\Infrastructure\ApplicationInterface;
+use KanbanBoard\Infrastructure\Interfaces\Application;
 use League\OAuth2\Client\Provider\AbstractProvider;
 
-class AuthApplication implements ApplicationInterface {
+class AuthApplication implements Application {
 
     /** @var AbstractProvider */
     private $provider;
 
     private $application;
 
-    public function __construct(ApplicationInterface $application, AbstractProvider $provider)
+    public function __construct(Application $application, AbstractProvider $provider)
 	{
         if (session_status() == PHP_SESSION_NONE) {
             session_start();

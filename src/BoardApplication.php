@@ -4,11 +4,11 @@
 namespace KanbanBoard;
 
 
-use KanbanBoard\Infrastructure\ApplicationInterface;
-use KanbanBoard\Infrastructure\Board as BoardInterface;
+use KanbanBoard\Infrastructure\Interfaces\Application;
+use KanbanBoard\Infrastructure\Interfaces\Board as BoardInterface;
 use Mustache_Engine;
 
-class BoardApplication implements ApplicationInterface
+class BoardApplication implements Application
 {
     private $board;
     private $engine;

@@ -1,10 +1,10 @@
 <?php
 
-namespace KanbanBoard\Infrastructure;
+namespace KanbanBoard\Infrastructure\Interfaces;
 
 use KanbanBoard\Entities\Milestone;
 
-interface MilestoneFactoryInterface
+interface MilestoneFactory
 {
     public function milestone(array $data): Milestone;
 }

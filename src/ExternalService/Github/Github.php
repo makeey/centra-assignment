@@ -3,9 +3,9 @@
 namespace KanbanBoard\ExternalService\Github;
 
 
-use KanbanBoard\Infrastructure\IssueFactory;
-use KanbanBoard\Infrastructure\MilestoneFactory;
-use KanbanBoard\Infrastructure\Service;
+use KanbanBoard\Infrastructure\Interfaces\IssueFactory;
+use KanbanBoard\Infrastructure\Interfaces\MilestoneFactory;
+use KanbanBoard\Infrastructure\Interfaces\Service;
 
 class Github implements Service
 {
@@ -14,7 +14,7 @@ class Github implements Service
     private $issueFactory;
 
     public function __construct(
-        ClientFactory $clientFactory,
+        ClientFactoryInterface $clientFactory,
         IssueFactory $issueFactory,
         MilestoneFactory $milestoneFactory
     )
