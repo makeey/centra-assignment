@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * This file part of `centra-assignment`.
+ * Written by Anton Makeieiev <makeey97@gmail.com>
+ */
+
+declare(strict_types=1);
+
 use KanbanBoard\Entities\Progress;
 use PHPUnit\Framework\TestCase;
 

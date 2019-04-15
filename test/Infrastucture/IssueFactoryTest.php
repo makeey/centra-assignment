@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * This file part of `centra-assignment`.
+ * Written by Anton Makeieiev <makeey97@gmail.com>
+ */
+
+declare(strict_types=1);
+
 use KanbanBoard\Entities\IssueState;
 use KanbanBoard\Entities\Progress;
 use KanbanBoard\Infrastructure\IssueFactory;
@@ -15,10 +22,8 @@ class IssueFactoryTest extends TestCase
         'state' => 'open',
         'title' => 'Found a bug',
         'body' => 'I\'m having a problem with this.',
-        'labels' =>
-            [
-                0 =>
-                    [
+        'labels' => [
+                0 => [
                         'id' => 208045946,
                         'node_id' => 'MDU6TGFiZWwyMDgwNDU5NDY=',
                         'url' => 'https://api.github.com/repos/octocat/Hello-World/labels/bug',
@@ -28,8 +33,7 @@ class IssueFactoryTest extends TestCase
                         'default' => true,
                     ],
             ],
-        'assignee' =>
-            [
+        'assignee' => [
                 'login' => 'octocat',
                 'id' => 1,
                 'node_id' => 'MDQ6VXNlcjE=',
@@ -50,14 +54,13 @@ class IssueFactoryTest extends TestCase
                 'site_admin' => false,
             ],
         'active_lock_reason' => 'too heated',
-        'pull_request' =>
-            [
+        'pull_request' => [
                 'url' => 'https://api.github.com/repos/octocat/Hello-World/pulls/1347',
                 'html_url' => 'https://github.com/octocat/Hello-World/pull/1347',
                 'diff_url' => 'https://github.com/octocat/Hello-World/pull/1347.diff',
                 'patch_url' => 'https://github.com/octocat/Hello-World/pull/1347.patch',
             ],
-        'closed_at' => NULL,
+        'closed_at' => null,
         'created_at' => '2011-04-22T13:33:48Z',
         'updated_at' => '2011-04-22T13:33:48Z',
     ];
@@ -68,11 +71,9 @@ class IssueFactoryTest extends TestCase
         'state' => 'closed',
         'title' => 'Found a bug',
         'body' => 'I\'m having a problem with this.  [x] [x] [ ] [ ] [ ] [ ]',
-        'labels' =>
-            [
+        'labels' => [
 
-                0 =>
-                    [
+                0 => [
                         'id' => 208045946,
                         'node_id' => 'MDU6TGFiZWwyMDgwNDU5NDY=',
                         'url' => 'https://api.github.com/repos/octocat/Hello-World/labels/bug',
@@ -92,6 +93,7 @@ class IssueFactoryTest extends TestCase
     ];
 
     private $markdown;
+
     public function __construct(?string $name = null, array $data = [], string $dataName = '')
     {
         $this->markdown = new Markdown();
@@ -100,21 +102,21 @@ class IssueFactoryTest extends TestCase
 
     public function testCanCreateIssueWithAssigned()
     {
-        $factory = new IssueFactory($this->markdown,['waiting-for-feedback']);
+        $factory = new IssueFactory($this->markdown, ['waiting-for-feedback']);
 
         $issue = $factory->issue($this->issueData);
 
         $this->assertEquals($this->issueData['id'], $issue->id());
         $this->assertEquals($this->issueData['number'], $issue->number());
         $this->assertEquals($this->issueData['title'], $issue->title());
-        $this->assertEquals($this->markdown->transform($this->issueData['body']), $issue->body() );
+        $this->assertEquals($this->markdown->transform($this->issueData['body']), $issue->body());
         $this->assertEquals($this->issueData['html_url'], $issue->url());
         $this->assertEquals($this->issueData['assignee']['avatar_url'].'?s=16', $issue->assignee());
-        $this->assertEquals(IssueState::ACTIVE,$issue->state());
+        $this->assertEquals(IssueState::ACTIVE, $issue->state());
         $this->assertEquals($this->issueData['closed_at'], $issue->closed());
         $this->assertEmpty($issue->paused());
 
-        $this->assertInstanceOf(Progress::class,$issue->progress());
+        $this->assertInstanceOf(Progress::class, $issue->progress());
         $this->assertEquals(0, $issue->progress()->percent());
         $this->assertEquals(0, $issue->progress()->complete());
         $this->assertEquals(0, $issue->progress()->total());
@@ -124,21 +126,21 @@ class IssueFactoryTest extends TestCase
 
     public function testCanCreateIssueWithOutAssigned()
     {
-        $factory = new IssueFactory($this->markdown,['waiting-for-feedback']);
+        $factory = new IssueFactory($this->markdown, ['waiting-for-feedback']);
 
         $issue = $factory->issue($this->issueData2);
 
         $this->assertEquals($this->issueData2['id'], $issue->id());
         $this->assertEquals($this->issueData2['number'], $issue->number());
         $this->assertEquals($this->issueData2['title'], $issue->title());
-        $this->assertEquals($this->markdown->transform($this->issueData2['body']), $issue->body() );
+        $this->assertEquals($this->markdown->transform($this->issueData2['body']), $issue->body());
         $this->assertEquals($this->issueData2['html_url'], $issue->url());
         $this->assertEquals(IssueState::COMPLETED, $issue->state());
         $this->assertEquals($this->issueData2['closed_at'], $issue->closed());
         $this->assertEmpty($issue->paused());
         $this->assertNull($issue->assignee());
 
-        $this->assertInstanceOf(Progress::class,$issue->progress());
+        $this->assertInstanceOf(Progress::class, $issue->progress());
         $this->assertEquals(33.0, $issue->progress()->percent());
         $this->assertEquals(2, $issue->progress()->complete());
         $this->assertEquals(6, $issue->progress()->total());

@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * This file part of `centra-assignment`.
+ * Written by Anton Makeieiev <makeey97@gmail.com>
+ */
+
+declare(strict_types=1);
 
 use KanbanBoard\Entities\Issue;
 use KanbanBoard\Entities\IssueState;
@@ -9,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 
 class MilestoneTest extends TestCase
 {
-
     private $title;
     private $url;
     private $progress;
@@ -64,7 +69,6 @@ class MilestoneTest extends TestCase
         parent::__construct($name, $data, $dataName);
     }
 
-
     public function testCanCreateAndSerializeMilestoneWithoutIssues()
     {
         $milestone = new Milestone(
@@ -82,7 +86,6 @@ class MilestoneTest extends TestCase
         $this->assertEquals([], $milestoneData['active']);
         $this->assertEquals([], $milestoneData['queued']);
         $this->assertEquals([], $milestoneData['active']);
-
     }
 
     public function testCanCreateAndSerializeMilestoneWithIssues()
@@ -128,14 +131,12 @@ class MilestoneTest extends TestCase
 
     public function testCanSortActiveIssues()
     {
-
         $milestone = new Milestone(
             $this->number,
             $this->title,
             $this->url,
             $this->progress
         );
-
 
         $issues = [
             new Issue(

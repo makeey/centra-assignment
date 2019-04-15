@@ -1,7 +1,13 @@
 <?php
 
-namespace KanbanBoard\Entities;
+/**
+ * This file part of `centra-assignment`.
+ * Written by Anton Makeieiev <makeey97@gmail.com>
+ */
 
+declare(strict_types=1);
+
+namespace KanbanBoard\Entities;
 
 class Issue implements \JsonSerializable
 {
@@ -50,8 +56,7 @@ class Issue implements \JsonSerializable
         ?string $closed = null,
         ?string $assignee = null,
         ?array $pullRequest = null
-    )
-    {
+    ) {
         $this->id = $id;
         $this->number = $number;
         $this->title = $title;
@@ -64,7 +69,6 @@ class Issue implements \JsonSerializable
         $this->state = $state;
         $this->pullRequest = null !== $pullRequest ? $pullRequest : [];
     }
-
 
     public function id(): int
     {
@@ -87,7 +91,6 @@ class Issue implements \JsonSerializable
     }
 
     public function url(): string
-
     {
         return $this->url;
     }
@@ -114,7 +117,7 @@ class Issue implements \JsonSerializable
 
     public function isPaused(): bool
     {
-        return (bool)count($this->paused);
+        return (bool) \count($this->paused);
     }
 
     public function state(): string
@@ -124,7 +127,7 @@ class Issue implements \JsonSerializable
 
     public function isHasPullRequest(): bool
     {
-        return (bool)count($this->pullRequest);
+        return (bool) \count($this->pullRequest);
     }
 
     public function jsonSerialize(): array
@@ -139,7 +142,7 @@ class Issue implements \JsonSerializable
             'paused' => $this->paused,
             'progress' => $this->progress->jsonSerialize(),
             'closed' => $this->closed,
-            'state' => $this->state
+            'state' => $this->state,
         ];
     }
 }

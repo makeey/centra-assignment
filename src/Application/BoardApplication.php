@@ -1,8 +1,13 @@
 <?php
 
+/**
+ * This file part of `centra-assignment`.
+ * Written by Anton Makeieiev <makeey97@gmail.com>
+ */
+
+declare(strict_types=1);
 
 namespace KanbanBoard\Application;
-
 
 use KanbanBoard\Infrastructure\Interfaces\Application;
 use KanbanBoard\Infrastructure\Interfaces\Board as BoardInterface;
@@ -23,6 +28,6 @@ class BoardApplication implements Application
 
     public function run(): void
     {
-        echo $this->engine->render('index', array('milestones' => $this->board->board()));
+        echo $this->engine->render('index', ['milestones' => $this->board->board()]);
     }
 }

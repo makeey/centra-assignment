@@ -6,4 +6,4 @@ vendor/
 cache/
 tmp/
 *.cache
-.phpunit.result.cache 
+.phpunit.result.cache

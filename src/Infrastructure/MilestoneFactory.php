@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * This file part of `centra-assignment`.
+ * Written by Anton Makeieiev <makeey97@gmail.com>
+ */
+
+declare(strict_types=1);
+
 namespace KanbanBoard\Infrastructure;
 
 use KanbanBoard\Entities\Milestone;
@@ -8,7 +15,6 @@ use KanbanBoard\Infrastructure\Interfaces\MilestoneFactory as MilestoneFactoryIn
 
 class MilestoneFactory implements MilestoneFactoryInterface
 {
-
     public function milestone(array $data): Milestone
     {
         return new Milestone(
@@ -23,5 +29,4 @@ class MilestoneFactory implements MilestoneFactoryInterface
     {
         return new Progress($closed_issues, $open_issues);
     }
-
 }

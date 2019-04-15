@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * This file part of `centra-assignment`.
+ * Written by Anton Makeieiev <makeey97@gmail.com>
+ */
+
+declare(strict_types=1);
 
 use KanbanBoard\Entities\Issue;
 use KanbanBoard\Entities\IssueState;
@@ -11,7 +17,6 @@ use PHPUnit\Framework\TestCase;
 
 class BoardTest extends TestCase
 {
-
     private $service;
     private $account;
     private $repository;
@@ -30,14 +35,14 @@ class BoardTest extends TestCase
             1,
             'title 1',
             'url',
-            new Progress(7,5)
+            new Progress(7, 5)
         );
 
         $milestone1 = new Milestone(
             2,
             'title 2',
             'url',
-            new Progress(6,5)
+            new Progress(6, 5)
         );
 
         $issue = new Issue(
@@ -47,7 +52,7 @@ class BoardTest extends TestCase
             'body',
             'url',
             IssueState::ACTIVE,
-            new Progress(4,5),
+            new Progress(4, 5),
             []
         );
         $issue2 = new Issue(
@@ -57,11 +62,11 @@ class BoardTest extends TestCase
             'body',
             'url',
             IssueState::ACTIVE,
-            new Progress(4,5),
+            new Progress(4, 5),
             []
         );
         $this->service->expects($this->exactly(2))->method('milestones')
-            ->withConsecutive([$this->account,$this->repository[0]], [$this->account, $this->repository[1]])
+            ->withConsecutive([$this->account, $this->repository[0]], [$this->account, $this->repository[1]])
             ->willReturnOnConsecutiveCalls([$milestone], [$milestone1]);
 
         $this->service->expects($this->exactly(2))->method('issues')
@@ -74,12 +79,11 @@ class BoardTest extends TestCase
                 [$issue2]
             );
 
-        $board = new Board($this->service,$this->repository,$this->account);
+        $board = new Board($this->service, $this->repository, $this->account);
 
         $data = $board->board();
 
         $this->assertEquals($issue->jsonSerialize(), $data[0]['active'][0]);
         $this->assertEquals($issue2->jsonSerialize(), $data[1]['active'][0]);
-
     }
 }

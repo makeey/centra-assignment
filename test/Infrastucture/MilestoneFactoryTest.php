@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * This file part of `centra-assignment`.
+ * Written by Anton Makeieiev <makeey97@gmail.com>
+ */
+
+declare(strict_types=1);
+
 use KanbanBoard\Entities\Progress;
 use KanbanBoard\Infrastructure\MilestoneFactory;
 use PHPUnit\Framework\TestCase;
@@ -19,8 +26,8 @@ class MilestoneFactoryTest extends TestCase
         'state' => 'open',
         'created_at' => '2019-04-08T19:47:28Z',
         'updated_at' => '2019-04-11T01:22:13Z',
-        'due_on' => NULL,
-        'closed_at' => NULL,
+        'due_on' => null,
+        'closed_at' => null,
         'repository' => 'go',
     ];
 
@@ -39,6 +46,5 @@ class MilestoneFactoryTest extends TestCase
             $milestone->progress()->total()
         );
         $this->assertEqualsWithDelta(0, $milestone->progress()->percent(), 0.0001);
-
     }
 }

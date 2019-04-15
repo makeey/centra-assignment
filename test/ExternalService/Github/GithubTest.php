@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * This file part of `centra-assignment`.
+ * Written by Anton Makeieiev <makeey97@gmail.com>
+ */
+
+declare(strict_types=1);
 
 use Github\Api\Issue as IssueClient;
 use Github\Api\Issue\Milestones;
@@ -42,8 +48,8 @@ class GithubTest extends TestCase
         'state' => 'open',
         'created_at' => '2019-04-08T19:47:28Z',
         'updated_at' => '2019-04-11T01:22:13Z',
-        'due_on' => NULL,
-        'closed_at' => NULL,
+        'due_on' => null,
+        'closed_at' => null,
         'repository' => 'go',
     ];
     private $issueData = [
@@ -53,11 +59,9 @@ class GithubTest extends TestCase
               'state' => 'closed',
               'title' => 'Found a bug',
               'body' => 'I\'m having a problem with this.  [x] [x] [ ] [ ] [ ] [ ]',
-              'labels' =>
-                  [
+              'labels' => [
 
-                      0 =>
-                          [
+                      0 => [
                               'id' => 208045946,
                               'node_id' => 'MDU6TGFiZWwyMDgwNDU5NDY=',
                               'url' => 'https://api.github.com/repos/octocat/Hello-World/labels/bug',
@@ -75,7 +79,6 @@ class GithubTest extends TestCase
               'created_at' => '2011-04-22T13:33:48Z',
               'updated_at' => '2011-04-22T13:33:48Z',
           ];
-
 
     public function __construct($name = null, array $data = [], $dataName = '')
     {
@@ -98,7 +101,7 @@ class GithubTest extends TestCase
                 ]
             );
 
-        $milestone = new Milestone('98',
+        $milestone = new Milestone(98,
             'Go1.12.4',
             'https://github.com/golang/go/milestone/98',
             new Progress(7, 0));
@@ -117,7 +120,7 @@ class GithubTest extends TestCase
         $this->clientFactory->expects($this->exactly(1))
             ->method('issueClient')->willReturn($issueClient);
 
-        $issue = new Issue(1, 2, 'title', 'body','url', IssueState::ACTIVE,new Progress(5,0) ,[]);
+        $issue = new Issue(1, 2, 'title', 'body', 'url', IssueState::ACTIVE, new Progress(5, 0), []);
 
         $this->issueFactory->expects($this->once())->method('issue')->willReturn($issue);
 
@@ -125,6 +128,6 @@ class GithubTest extends TestCase
 
         $github = new Github($this->clientFactory, $this->issueFactory, $this->milestoneFactory);
 
-        $this->assertEquals([$issue], $github->issues('account','repository','2'));
+        $this->assertEquals([$issue], $github->issues('account', 'repository', 2));
     }
 }

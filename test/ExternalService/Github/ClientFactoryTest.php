@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * This file part of `centra-assignment`.
+ * Written by Anton Makeieiev <makeey97@gmail.com>
+ */
+
+declare(strict_types=1);
 
 use Github\Api\Issue;
 
@@ -26,7 +32,7 @@ class ClientFactoryTest extends TestCase
     public function testCanCreateIssueClient()
     {
         $_SESSION['gh-token'] = null;
-        $factory = new ClientFactory($this->tokenProvider,$this->cachePool);
+        $factory = new ClientFactory($this->tokenProvider, $this->cachePool);
         $this->assertInstanceOf(Issue::class, $factory->issueClient());
     }
 

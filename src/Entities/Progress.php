@@ -1,7 +1,13 @@
 <?php
 
-namespace KanbanBoard\Entities;
+/**
+ * This file part of `centra-assignment`.
+ * Written by Anton Makeieiev <makeey97@gmail.com>
+ */
 
+declare(strict_types=1);
+
+namespace KanbanBoard\Entities;
 
 class Progress implements \JsonSerializable
 {
@@ -24,7 +30,7 @@ class Progress implements \JsonSerializable
 
     private function calculatePercent(): void
     {
-        $this->percent = $this->total !== 0 ? round($this->complete / $this->total * 100) : null;
+        $this->percent = $this->total !== 0 ? \round($this->complete / $this->total * 100) : null;
     }
 
     private function fillTotal(): void
@@ -58,7 +64,7 @@ class Progress implements \JsonSerializable
             'total' => $this->total,
             'complete' => $this->complete,
             'remaining' => $this->remaining,
-            'percent' => $this->percent
+            'percent' => $this->percent,
         ];
     }
 }
