@@ -1,7 +1,7 @@
 <?php
 
 
-namespace KanbanBoard;
+namespace KanbanBoard\Application;
 
 
 use KanbanBoard\Infrastructure\Interfaces\Application;
