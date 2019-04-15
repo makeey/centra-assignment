@@ -29,7 +29,7 @@ class Board implements BoardInterface
         }
         $milestones = array_map(function (Milestone $milestone) {
             return $milestone->jsonSerialize();
-        }, ...$milestones);
+        }, array_merge(...$milestones));
         array_column($milestones, 'milestone');
         ksort($milestones);
         return $milestones;
