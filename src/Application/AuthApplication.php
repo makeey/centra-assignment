@@ -31,7 +31,7 @@ class AuthApplication implements Application
 
     public function run(): void
     {
-        if (\array_key_exists('gh-token', $_SESSION)) {
+        if (isset($_SESSION['gh-token'])) {
             $this->application->run();
         } else {
             $this->login();
@@ -40,22 +40,17 @@ class AuthApplication implements Application
 
     private function login(): void
     {
-        $token = null;
-        if (\array_key_exists('gh-token', $_SESSION)) {
-            $token = $_SESSION['gh-token'];
-        } elseif (
-            array_key_exists('code', $_GET) &&
-            null !== $_GET['code'] &&
-            $_SESSION['redirected']) {
-            $_SESSION['redirected'] = false;
-            $token = $this->returnsFromGithub($_GET['code']);
-        } else {
+       if (!isset($_GET['code'])) {
             $this->redirectToGithub();
+        } elseif(
+            array_key_exists('state', $_GET) && null === $_GET['state'] &&
+           ($_GET['state'] !== $_SESSION['oauth2state'])
+        ) {
+           throw new \InvalidArgumentException('Invalid oauth state');
         }
-        $this->logout();
+        $token = $this->returnsFromGithub($_GET['code']);
         $_SESSION['gh-token'] = $token->getToken();
-        \header('');
-        exit;
+        $this->run();
     }
 
     private function returnsFromGithub(string $code): AccessToken
@@ -69,7 +64,6 @@ class AuthApplication implements Application
 
     private function redirectToGithub(): void
     {
-        $_SESSION['redirected'] = true;
         $_SESSION['oauth2state'] = $this->provider->getState();
         \header('Location: ' . $this->provider->getAuthorizationUrl());
         exit;

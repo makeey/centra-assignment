@@ -80,5 +80,5 @@ return [
     Application::class => autowire(AuthApplication::class)->constructor(
         autowire(BoardApplication::class),
         get(AbstractProvider::class)
-    ),
+    )->lazy(),
 ];
