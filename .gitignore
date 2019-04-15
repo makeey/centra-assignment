@@ -1,7 +1,6 @@
 vendor/
 .idea/
 .env
-*.lock
 .php_cs.cache
 cache/
 tmp/
