@@ -26,7 +26,7 @@ class Github implements Service
 
     public function milestones(string $account, string $repository): array
     {
-        return array_map(function ($datum) use ($repository) {
+        return array_map(function ($datum){
             return $this->milestoneFactory->milestone($datum);
         }, $this->clientFactory->milestoneClient()->all($account, $repository));
     }

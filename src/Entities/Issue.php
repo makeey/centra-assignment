@@ -20,11 +20,17 @@ class Issue implements \JsonSerializable
     /** @var string */
     private $url;
 
-    /** @var string */
-    private $assignee;
+    /** @var string|null*/
+    private $assignee = null;
 
     /** @var array */
-    private $paused = false;
+    private $paused = null;
+
+    /** @var string|null */
+    private $closed;
+
+    /** @var string */
+    private $state;
 
     /** @var Progress */
     private $progress;
@@ -59,12 +65,7 @@ class Issue implements \JsonSerializable
         $this->pullRequest = $pullRequest ? $pullRequest : [];
     }
 
-    /** @var string */
-    private $closed;
 
-
-    /** @var string */
-    private $state;
 
 
     public function id(): int
