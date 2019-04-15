@@ -10,11 +10,14 @@ use KanbanBoard\Infrastructure\Interfaces\Service;
 
 class Board implements BoardInterface
 {
+    /** @var Service  */
     private $github;
+    /** @var array  */
     private $repositories;
+    /** @var string */
     private $account;
 
-    public function __construct(Service $service, array $repositories, $account)
+    public function __construct(Service $service, array $repositories, string $account)
     {
         $this->account = $account;
         $this->github = $service;
@@ -35,7 +38,7 @@ class Board implements BoardInterface
         return $milestones;
     }
 
-    private function milestoneForRepositoryWithIssues($repository)
+    private function milestoneForRepositoryWithIssues(string $repository): array
     {
         $milestones = $this->github->milestones($this->account, $repository);
         $milestones = array_filter($milestones, static function (Milestone $milestone): bool {
@@ -52,10 +55,10 @@ class Board implements BoardInterface
         );
     }
 
-    private function issueForMilestoneWithoutPullRequest(string $repository, int $milestoneNumber)
+    private function issueForMilestoneWithoutPullRequest(string $repository, int $milestoneNumber): array
     {
         return array_filter(
-            $this->github->issues($this->account, $repository, $milestoneNumber), static function (Issue $issue) {
+            $this->github->issues($this->account, $repository, $milestoneNumber), static function (Issue $issue): bool {
             return !$issue->isHasPullRequest();
         });
     }

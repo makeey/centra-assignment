@@ -10,7 +10,9 @@ use Mustache_Engine;
 
 class BoardApplication implements Application
 {
+    /** @var BoardInterface  */
     private $board;
+    /** @var Mustache_Engine  */
     private $engine;
 
     public function __construct(BoardInterface $board, Mustache_Engine $engine)
@@ -19,7 +21,7 @@ class BoardApplication implements Application
         $this->engine = $engine;
     }
 
-    public function run()
+    public function run(): void
     {
         echo $this->engine->render('index', array('milestones' => $this->board->board()));
     }

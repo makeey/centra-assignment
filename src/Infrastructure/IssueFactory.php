@@ -12,8 +12,10 @@ use Michelf\MarkdownInterface;
 class IssueFactory implements IssueFactoryInterface
 {
 
+    /** @var MarkdownInterface  */
     private $markdown;
 
+    /** @var array  */
     private $pauseLabels;
 
     public function __construct(MarkdownInterface $markdown, array $pauseLabels)
@@ -51,27 +53,27 @@ class IssueFactory implements IssueFactoryInterface
     private function resolveState(array $data): string
     {
         return $data['state'] === 'closed' ? IssueState::COMPLETED:
-            ((array_key_exists('assignee', $data) && !empty($data['assignee'])) ? IssueState::ACTIVE :
+            ((array_key_exists('assignee', $data) && null !== $data['assignee']) ? IssueState::ACTIVE :
                 IssueState::QUEUED);
     }
 
-    private function calculateProgress(int $completed, int $remaining)
+    private function calculateProgress(int $completed, int $remaining): Progress
     {
         return new Progress($completed,$remaining);
     }
 
-    private function resolvePause(array $data)
+    private function resolvePause(array $data): array
     {
         foreach ($data['labels'] as $label) {
-            if (in_array($label['name'], $this->pauseLabels)) {
+            if (in_array($label['name'], $this->pauseLabels,true)) {
                 return [$label['name']];
             }
         }
         return [];
     }
 
-    private function resolveAssignee(array $data)
+    private function resolveAssignee(array $data): ?string
     {
-        return (array_key_exists('assignee', $data) && !empty($data['assignee'])) ? $data['assignee']['avatar_url'] . '?s=16' : NULL;
+        return (array_key_exists('assignee', $data) && null !== $data['assignee']) ? $data['assignee']['avatar_url'] . '?s=16' : NULL;
     }
 }

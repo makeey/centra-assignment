@@ -5,9 +5,13 @@ namespace KanbanBoard\Entities;
 
 class Progress implements \JsonSerializable
 {
-    private $total;
+    /** @var int */
+    private $total = 0;
+    /** @var int  */
     private $complete;
+    /** @var int  */
     private $remaining;
+    /** @var ?float */
     private $percent = null;
 
     public function __construct(int $completed, int $remaining)
@@ -18,12 +22,12 @@ class Progress implements \JsonSerializable
         $this->calculatePercent();
     }
 
-    private function calculatePercent()
+    private function calculatePercent(): void
     {
-        $this->percent = $this->total ? round($this->complete / $this->total * 100) : null;
+        $this->percent = $this->total !== 0 ? round($this->complete / $this->total * 100) : null;
     }
 
-    private function fillTotal()
+    private function fillTotal(): void
     {
         $this->total = $this->complete + $this->remaining;
     }
@@ -48,7 +52,7 @@ class Progress implements \JsonSerializable
         return $this->percent;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'total' => $this->total,

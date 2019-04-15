@@ -3,14 +3,19 @@
 namespace KanbanBoard\ExternalService\Github;
 
 
+use KanbanBoard\Entities\Issue;
+use KanbanBoard\Entities\Milestone;
 use KanbanBoard\Infrastructure\Interfaces\IssueFactory;
 use KanbanBoard\Infrastructure\Interfaces\MilestoneFactory;
 use KanbanBoard\Infrastructure\Interfaces\Service;
 
 class Github implements Service
 {
+    /** @var ClientFactoryInterface  */
     private $clientFactory;
+    /** @var MilestoneFactory  */
     private $milestoneFactory;
+    /** @var IssueFactory  */
     private $issueFactory;
 
     public function __construct(
@@ -26,7 +31,7 @@ class Github implements Service
 
     public function milestones(string $account, string $repository): array
     {
-        return array_map(function ($datum){
+        return array_map(function ($datum): Milestone{
             return $this->milestoneFactory->milestone($datum);
         }, $this->clientFactory->milestoneClient()->all($account, $repository));
     }
@@ -34,12 +39,8 @@ class Github implements Service
     public function issues(string $account,string $repository,  int $milestoneId): array
     {
         $issue_parameters = array('milestone' => $milestoneId, 'state' => 'all');
-        $issues = array_filter($this->clientFactory->issueClient()->all($account, $repository, $issue_parameters),
-            function ($issues) {
-                return empty($issues['pull_request']);
-            }
-        );
-        return array_map(function ($issue) {
+        $issues = $this->clientFactory->issueClient()->all($account, $repository, $issue_parameters);
+        return array_map(function ($issue): Issue {
             return $this->issueFactory->issue($issue);
         }, $issues);
     }

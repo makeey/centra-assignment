@@ -20,7 +20,7 @@ class Issue implements \JsonSerializable
     /** @var string */
     private $url;
 
-    /** @var string|null*/
+    /** @var string|null */
     private $assignee = null;
 
     /** @var array */
@@ -62,10 +62,8 @@ class Issue implements \JsonSerializable
         $this->progress = $progress;
         $this->closed = $closed;
         $this->state = $state;
-        $this->pullRequest = $pullRequest ? $pullRequest : [];
+        $this->pullRequest = null !== $pullRequest ? $pullRequest : [];
     }
-
-
 
 
     public function id(): int
@@ -126,10 +124,10 @@ class Issue implements \JsonSerializable
 
     public function isHasPullRequest(): bool
     {
-        return (bool)!empty($this->pullRequest);
+        return (bool)count($this->pullRequest);
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'id' => $this->id,

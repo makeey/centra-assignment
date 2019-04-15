@@ -6,5 +6,5 @@ namespace KanbanBoard\Infrastructure\Interfaces;
 
 interface Application
 {
-    public function run();
+    public function run(): void ;
 }

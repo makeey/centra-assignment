@@ -19,7 +19,7 @@ class MilestoneFactory implements MilestoneFactoryInterface
         );
     }
 
-    private function calculateProgress($closed_issues, $open_issues): Progress
+    private function calculateProgress(int $closed_issues, int $open_issues): Progress
     {
         return new Progress($closed_issues, $open_issues);
     }

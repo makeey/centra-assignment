@@ -17,8 +17,9 @@
 		"league/oauth2-github": "^1.0@dev",
 		"php-http/guzzle6-adapter": "^1.1",
 		"zendframework/zend-diactoros": "^2.1@dev",
-		"cache/filesystem-adapter": "^1.1@dev"
-	},
+		"cache/filesystem-adapter": "^1.1@dev",
+        "ext-json": "*"
+    },
 	"minimum-stability": "dev",
 	"require-dev": {
 		"phpstan/phpstan": "^0.11.0@dev",

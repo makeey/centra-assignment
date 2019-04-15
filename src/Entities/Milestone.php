@@ -18,8 +18,6 @@ class Milestone implements \JsonSerializable
     /** @var int */
     private $number;
 
-
-
     /** @var Issue[] */
     private $issues = [];
 
@@ -67,41 +65,7 @@ class Milestone implements \JsonSerializable
         return $this->number;
     }
 
-
-    public function activeIssues(): array
-    {
-        if (null === $this->active) {
-            $this->active = array_filter($this->issues, static function (Issue $issue) {
-                return $issue->state() === IssueState::ACTIVE;
-            });
-            usort($this->active, function (Issue $a, Issue $b): int {
-               return count($a->paused()) <=> count($b->paused()) ?: $a->title() <=> $b->title();
-            });
-        }
-        return $this->active;
-    }
-
-    public function queuedIssues(): array
-    {
-        if (null === $this->queued) {
-            $this->queued = array_filter($this->issues, static function (Issue $issue) {
-                return $issue->state() === IssueState::QUEUED;
-            });
-        }
-        return $this->queued;
-    }
-
-    public function completedIssues(): array
-    {
-        if (null === $this->completed) {
-            $this->completed = array_filter($this->issues, static function (Issue $issue) {
-                return $issue->state() === IssueState::COMPLETED;
-            });
-        }
-        return $this->completed;
-    }
-
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'milestone' => $this->title,
@@ -113,14 +77,49 @@ class Milestone implements \JsonSerializable
         ];
     }
 
-    private function prepareIssuesToSerialize(Issue ...$issues)
+    private function prepareIssuesToSerialize(Issue ...$issues): array
     {
         return array_map(static function (Issue $issue) {
             return $issue->jsonSerialize();
         }, $issues);
     }
 
-    public function withIssues(Issue ...$issues){
+    public function queuedIssues(): array
+    {
+        if (null === $this->queued) {
+            $this->queued = array_filter($this->issues, static function (Issue $issue): bool {
+                return $issue->state() === IssueState::QUEUED;
+            });
+        }
+        return $this->queued;
+    }
+
+    public function activeIssues(): array
+    {
+        if (null === $this->active) {
+            $this->active = array_filter($this->issues, static function (Issue $issue): bool {
+                return $issue->state() === IssueState::ACTIVE;
+            });
+            usort($this->active, function (Issue $a, Issue $b): int {
+                return count($a->paused()) <=> count($b->paused()) ?: $a->title() <=> $b->title();
+            });
+        }
+        return $this->active;
+    }
+
+    public function completedIssues(): array
+    {
+        if (null === $this->completed) {
+            $this->completed = array_filter($this->issues, static function (Issue $issue): bool {
+                return $issue->state() === IssueState::COMPLETED;
+            });
+        }
+        return $this->completed;
+    }
+
+    public function withIssues(Issue ...$issues): self
+    {
         $this->issues = $issues;
+        return $this;
     }
 }
