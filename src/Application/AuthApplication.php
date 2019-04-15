@@ -44,12 +44,12 @@ class AuthApplication implements Application
         if (\array_key_exists('gh-token', $_SESSION)) {
             $token = $_SESSION['gh-token'];
         } elseif (
+            array_key_exists('code', $_GET) &&
             null !== $_GET['code'] &&
             $_SESSION['redirected']) {
             $_SESSION['redirected'] = false;
             $token = $this->returnsFromGithub($_GET['code']);
         } else {
-
             $this->redirectToGithub();
         }
         $this->logout();
