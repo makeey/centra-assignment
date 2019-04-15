@@ -1,0 +1,4 @@
+parameters:
+	bootstrap: bootstrap.php
+includes:
+	- vendor/phpstan/phpstan-strict-rules/rules.neon

@@ -24,7 +24,8 @@
 		"phpstan/phpstan": "^0.11.0@dev",
 		"phpunit/phpunit": "8.0.1",
 		"friendsofphp/php-cs-fixer": "^2.15@dev",
-		"prooph/php-cs-fixer-config": "dev-master"
+		"prooph/php-cs-fixer-config": "dev-master",
+		"phpstan/phpstan-strict-rules": "^0.11.0@dev"
 	},
 	"scripts": {
 		"check": [
