@@ -7,6 +7,7 @@ namespace KanbanBoard\ExternalService\Github;
 use Github\Api\Issue;
 use Github\Client;
 use KanbanBoard\Infrastructure\Interfaces\TokenProvider;
+use Psr\Cache\CacheItemPoolInterface;
 
 class ClientFactory implements ClientFactoryInterface
 {
@@ -18,9 +19,10 @@ class ClientFactory implements ClientFactoryInterface
     /** @var Issue */
     private $issueClient;
 
-    public function __construct(TokenProvider $token)
+    public function __construct(TokenProvider $token, CacheItemPoolInterface $pool)
     {
         $this->client = new Client();
+        $this->client->addCache($pool);
         $this->client->authenticate($token->tokenStrictly(), Client::AUTH_HTTP_TOKEN);
         $this->issueClient = $this->client->issue();
         $this->milestoneClient = $this->issueClient->milestones();

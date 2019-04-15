@@ -1,5 +1,6 @@
 <?php
 
+use Cache\Adapter\Filesystem\FilesystemCachePool;
 use KanbanBoard\AuthApplication;
 use KanbanBoard\BoardApplication;
 use KanbanBoard\ExternalService\Github\ClientFactory;
@@ -12,13 +13,27 @@ use KanbanBoard\Infrastructure\Interfaces\TokenProvider;
 use KanbanBoard\Infrastructure\IssueFactory;
 use KanbanBoard\Infrastructure\MilestoneFactory;
 use KanbanBoard\Infrastructure\SessionTokenProvider;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
+use League\Flysystem\FilesystemInterface;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use Michelf\Markdown;
 use Michelf\MarkdownInterface;
 use function DI\autowire;
 use function DI\get;
+use Psr\Cache\CacheItemPoolInterface;
 
 return [
+
+    FilesystemInterface::class => function() {
+        return new Filesystem(new Local(__DIR__.'/../'));
+    },
+
+    CacheItemPoolInterface::class => function(FilesystemInterface $filesystem){
+        $pool = new FilesystemCachePool($filesystem);
+        $pool->setFolder('tmp/git-cache');
+        return $pool;
+    },
 
     AbstractProvider::class => autowire(\League\OAuth2\Client\Provider\Github::class)->constructor([
         'clientId' => getenv('GH_CLIENT_ID'),
@@ -32,7 +47,10 @@ return [
 
     TokenProvider::class => autowire(SessionTokenProvider::class)->lazy(),
 
-    ClientFactoryInterface::class => autowire(ClientFactory::class)->constructor(get(TokenProvider::class)),
+    ClientFactoryInterface::class => autowire(ClientFactory::class)->constructor(
+        get(TokenProvider::class),
+        get(CacheItemPoolInterface::class)
+    ),
 
     Service::class => autowire(Github::class)->constructor(
         get(ClientFactoryInterface::class),
